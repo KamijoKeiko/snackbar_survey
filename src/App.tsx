@@ -4,9 +4,12 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import {CountButton} from "./component/CountButton.tsx";
-import {FeedbackSnackbar} from "./component/FeedbackSnackbar";
-import {useFeedbackSnackbar} from './component/useFeedbackSnackbar';
+import {CountButton} from "./components/CountButton.tsx";
+import {FeedbackSnackbar} from "./components/FeedbackSnackbar";
+import {useFeedbackSnackbar} from './hooks/useFeedbackSnackbar.tsx';
+import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {NextPage} from "./pages/NextPage.tsx";
+import {New} from "./pages/New.tsx";
 
 
 export const App = () => {
@@ -53,7 +56,14 @@ export const App = () => {
       </div>
 
       <FeedbackSnackbar open={openSnackbar} onClose={closeSnackbar} snackbarMessage={snackbarMessage}
-                        severity={snackbarSeverity} />
+                        severity={snackbarSeverity}/>
+
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<New />} />
+          <Route path="/next-page" element={<NextPage/>} />
+        </Routes>
+      </BrowserRouter>
 
     </>
   )
