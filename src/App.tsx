@@ -1,4 +1,4 @@
-import {SyntheticEvent, useState} from 'react'
+import {useState} from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
@@ -6,38 +6,31 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import {CountButton} from "./component/CountButton.tsx";
 import {FeedbackSnackbar} from "./component/FeedbackSnackbar";
+import {useFeedbackSnackbar} from './component/useFeedbackSnackbar';
 
 
 export const App = () => {
+  const {openSnackbar, snackbarMessage, snackbarSeverity, showSnackbar, closeSnackbar} = useFeedbackSnackbar();
   const [count, setCount] = useState(0)
-  const [openSnackbar, setOpenSnackbar] = useState(false)
-  const [snackbarMessage, setSnackbarMessage] = useState('')
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info">("success")
+
 
   const changeCount = (amount: number) => {
-    if (count + amount < 0) return
-
-    setCount(count => count + amount)
-    setSnackbarMessage(`Count is ${count + amount}`)
-    setSnackbarSeverity(amount > 0 ? "success" : "error")
-    setOpenSnackbar(true)
+    if (count + amount < 0) {
+      setCount(0)
+      showSnackbar("Count cannot be less than 0", "error")
+    } else {
+      setCount(count => count + amount)
+      showSnackbar(`Count is ${count + amount}`, "success")
+    }
   }
 
 
   const reset = () => {
 
     setCount(0)
-    setSnackbarMessage(`Count is reset`)
-    setSnackbarSeverity("info")
-    setOpenSnackbar(true)
+    showSnackbar(`Count is reset`, "info")
   }
 
-  const handleCloseSnackbar = (_event: SyntheticEvent | Event, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSnackbar(false)
-  }
   return (
     <>
       <div>
@@ -59,7 +52,8 @@ export const App = () => {
         <CountButton onClick={() => changeCount(-1)}><RemoveIcon/></CountButton>
       </div>
 
-      <FeedbackSnackbar open={openSnackbar} onClose={handleCloseSnackbar} snackbarMessage={snackbarMessage} severity={snackbarSeverity}/>
+      <FeedbackSnackbar open={openSnackbar} onClose={closeSnackbar} snackbarMessage={snackbarMessage}
+                        severity={snackbarSeverity} />
 
     </>
   )

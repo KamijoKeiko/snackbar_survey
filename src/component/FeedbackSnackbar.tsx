@@ -12,7 +12,7 @@ type Props = {
 export const FeedbackSnackbar:FC<Props> = ({
   open, onClose,snackbarMessage, severity
 }:Props) => {
-  return <Snackbar open={open} autoHideDuration={500} onClose={onClose}>
+  return <Snackbar open={open}>
     <Alert onClose={onClose} severity={severity} variant="filled">
       {snackbarMessage}
     </Alert>
