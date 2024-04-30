@@ -1,5 +1,4 @@
-import {SyntheticEvent, useEffect, useState} from "react";
-
+import {SyntheticEvent, useState} from "react";
 
 type UseFeedbackSnackbarReturnType = {
   openSnackbar: boolean,
@@ -10,41 +9,27 @@ type UseFeedbackSnackbarReturnType = {
 }
 
 export const useFeedbackSnackbar = (): UseFeedbackSnackbarReturnType => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-  const [severity, setSeverity] = useState<"success" | "error" | "info">("success");
+  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
+  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info">("success");
 
-
-  useEffect(() => {
-    // severityが更新されたときにautoHideDurationを設定
-    const autoHideDuration = severity === 'error' ? null : 2000;
-
-    // スナックバーが開いているときに新しいautoHideDurationがnullでなければ自動閉鎖を設定
-    if (open && autoHideDuration !== null) {
-      const timer = setTimeout(() => {
-        setOpen(false);
-      }, autoHideDuration);
-      return () => clearTimeout(timer);
-    }
-  }, [open, severity]);
-
-  const show = (message: string, severity: 'success' | 'error' | 'info') => {
-    setMessage(message)
-    setSeverity(severity)
-    setOpen(true)
+  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info') => {
+    setSnackbarMessage(message)
+    setSnackbarSeverity(severity)
+    setOpenSnackbar(true)
   }
 
-  const close = (_event?: Event | SyntheticEvent<Element, Event>, reason?: string) => {
+  const closeSnackbar = (_event?: Event | SyntheticEvent<Element, Event>, reason?: string) => {
     if (reason === 'clickaway') {
       return
     }
-    setOpen(false)
+    setOpenSnackbar(false)
   }
   return {
-    openSnackbar: open,
-    snackbarMessage: message,
-    snackbarSeverity: severity,
-    showSnackbar: show,
-    closeSnackbar: close
+    openSnackbar,
+    snackbarMessage,
+    snackbarSeverity,
+    showSnackbar,
+    closeSnackbar
   }
 }

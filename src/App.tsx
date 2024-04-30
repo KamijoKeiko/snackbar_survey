@@ -7,23 +7,25 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import {CountButton} from "./components/CountButton.tsx";
 import {FeedbackSnackbar} from "./components/FeedbackSnackbar";
 import {useFeedbackSnackbar} from './hooks/useFeedbackSnackbar.tsx';
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
-import {NextPage} from "./pages/NextPage.tsx";
-import {New} from "./pages/New.tsx";
+import {useNavigate} from "react-router-dom";
 
 
 export const App = () => {
   const {openSnackbar, snackbarMessage, snackbarSeverity, showSnackbar, closeSnackbar} = useFeedbackSnackbar();
   const [count, setCount] = useState(0)
+  const navigate = useNavigate()
 
 
   const changeCount = (amount: number) => {
     if (count + amount < 0) {
-      setCount(0)
+
       showSnackbar("Count cannot be less than 0", "error")
     } else {
       setCount(count => count + amount)
       showSnackbar(`Count is ${count + amount}`, "success")
+      setTimeout(() => {
+        navigate('/next-page');
+      }, 1500);
     }
   }
 
@@ -57,13 +59,6 @@ export const App = () => {
 
       <FeedbackSnackbar open={openSnackbar} onClose={closeSnackbar} snackbarMessage={snackbarMessage}
                         severity={snackbarSeverity}/>
-
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<New />} />
-          <Route path="/next-page" element={<NextPage/>} />
-        </Routes>
-      </BrowserRouter>
 
     </>
   )

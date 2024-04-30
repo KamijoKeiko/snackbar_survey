@@ -14,7 +14,6 @@ export const CountButton: FC<Props> = ({onClick, variant="contained", children}:
         onClick={onClick}
         variant={variant}
         color="primary">
-
         {children}
       </Button>
 
