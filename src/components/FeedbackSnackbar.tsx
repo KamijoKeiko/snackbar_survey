@@ -1,32 +1,25 @@
-import {FC, useEffect} from "react";
+import {useEffect} from "react";
 import {Snackbar, Alert} from "@mui/material";
+import {UseFeedbackSnackbarReturnType} from "../hooks/useFeedbackSnackbar.tsx";
 
 
-type Props = {
-  open: boolean,
-  onClose: () => void,
-  snackbarMessage: string
-  severity: 'success' | 'error' | 'info'
+export const FeedbackSnackbar = ({snackbar, closeSnackbar}: UseFeedbackSnackbarReturnType) => {
 
-}
-export const FeedbackSnackbar: FC<Props> = ({
-                                              open, onClose, snackbarMessage, severity
-                                            }: Props) => {
 
   useEffect(() => {
-    if (open && severity === 'success' || severity === 'info') {
+    if (snackbar.open && snackbar.severity === 'success' || snackbar.severity === 'info') {
       const timer = setTimeout(() => {
-        onClose();
+        closeSnackbar();
       }, 1500);
 
       return () => clearTimeout(timer);
     }
-  }, [open, severity, onClose]);
+  }, [snackbar.open, snackbar.severity, closeSnackbar]);
 
 
-  return <Snackbar open={open}>
-    <Alert onClose={onClose} severity={severity} variant="filled">
-      {snackbarMessage}
+  return <Snackbar open={snackbar.open}>
+    <Alert onClose={closeSnackbar} severity={snackbar.severity} variant="filled">
+      {snackbar.message}
     </Alert>
   </Snackbar>;
 }

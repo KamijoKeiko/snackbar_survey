@@ -1,34 +1,30 @@
-import {SyntheticEvent, useState} from "react";
+import {useState} from "react";
 
-type UseFeedbackSnackbarReturnType = {
-  openSnackbar: boolean,
-  snackbarMessage: string,
-  snackbarSeverity: 'success' | 'error' | 'info',
-  showSnackbar: (message: string, severity: 'success' | 'error' | 'info') => void,
-  closeSnackbar: (_event?: Event | SyntheticEvent<Element, Event> | undefined, reason?: string | undefined) => void
+type SeverityType = 'success' | 'error' | 'info'
+
+type SnackbarStateType = {
+  open: boolean,
+  message: string,
+  severity: SeverityType
+}
+
+export type UseFeedbackSnackbarReturnType = {
+  snackbar: SnackbarStateType
+  showSnackbar: (message: string, severity: SeverityType) => void,
+  closeSnackbar: () => void
 }
 
 export const useFeedbackSnackbar = (): UseFeedbackSnackbarReturnType => {
-  const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
-  const [snackbarMessage, setSnackbarMessage] = useState<string>("");
-  const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error" | "info">("success");
-
-  const showSnackbar = (message: string, severity: 'success' | 'error' | 'info') => {
-    setSnackbarMessage(message)
-    setSnackbarSeverity(severity)
-    setOpenSnackbar(true)
+const [snackbar, setSnackbar] = useState<SnackbarStateType>({ open: false, message: "", severity: "success" });
+  const showSnackbar = (message: string, severity: SeverityType) => {
+   setSnackbar({ open: true, message, severity })
   }
 
-  const closeSnackbar = (_event?: Event | SyntheticEvent<Element, Event>, reason?: string) => {
-    if (reason === 'clickaway') {
-      return
-    }
-    setOpenSnackbar(false)
+  const closeSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }))
   }
   return {
-    openSnackbar,
-    snackbarMessage,
-    snackbarSeverity,
+    snackbar,
     showSnackbar,
     closeSnackbar
   }

@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 
 
 export const App = () => {
-  const {openSnackbar, snackbarMessage, snackbarSeverity, showSnackbar, closeSnackbar} = useFeedbackSnackbar();
+  const {snackbar, showSnackbar, closeSnackbar} = useFeedbackSnackbar();
   const [count, setCount] = useState(0)
   const navigate = useNavigate()
 
@@ -57,8 +57,7 @@ export const App = () => {
         <CountButton onClick={() => changeCount(-1)}><RemoveIcon/></CountButton>
       </div>
 
-      <FeedbackSnackbar open={openSnackbar} onClose={closeSnackbar} snackbarMessage={snackbarMessage}
-                        severity={snackbarSeverity}/>
+      <FeedbackSnackbar snackbar={snackbar} closeSnackbar={closeSnackbar} showSnackbar={showSnackbar}/>
 
     </>
   )
